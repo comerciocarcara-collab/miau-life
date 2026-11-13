@@ -11,6 +11,11 @@ import Agenda from './paginas/Agenda'
 import Tarefas from './paginas/Tarefas'
 import Evolucao from './paginas/Evolucao'
 import Areas from './paginas/Areas'
+import MinhasAreas from './paginas/MinhasAreas'
+import Agora from './paginas/Agora'
+import Energia from './paginas/Energia'
+import Importar from './paginas/Importar'
+import Viagem from './paginas/Viagem'
 import PaginaArea from './paginas/PaginaArea'
 import EmBreve from './paginas/EmBreve'
 import Ajustes from './paginas/Ajustes'
@@ -57,7 +62,12 @@ export default function App() {
             />
           }
         />
-        <Route path="/areas" element={<Areas />} />
+        <Route path="/agora" element={<Agora />} />
+        <Route path="/energia" element={<Energia />} />
+        <Route path="/importar" element={<Importar />} />
+        <Route path="/viagem" element={<Viagem />} />
+        <Route path="/areas" element={<MinhasAreas />} />
+        <Route path="/areas/editar" element={<Areas />} />
         <Route path="/area/:id" element={<PaginaArea />} />
         <Route path="/ajustes" element={<Ajustes />} />
         <Route path="*" element={<Navigate to="/" replace />} />

@@ -108,6 +108,21 @@ export async function criarAtividade(n: NovaAtividade): Promise<void> {
   gravar('atividades', [{ ...linha, id: novoId(), created_at: agora() }, ...ler<Atividade>('atividades')])
 }
 
+/** Várias de uma vez (importar, quebrar em partes). Quem tem micropassos vem antes deles na lista. */
+export async function criarAtividades(lista: NovaAtividade[]): Promise<void> {
+  if (lista.length === 0) return
+  const linhas = lista.map((n) => ({ ...ATIVIDADE_VAZIA, ...n, id: n.id ?? novoId() }))
+  if (supabase) {
+    const { error } = await supabase.from('atividades').insert(linhas)
+    if (error) throw error
+    return
+  }
+  const ts = agora()
+  gravar('atividades', [...linhas.map((l) => ({ ...l, created_at: ts })), ...ler<Atividade>('atividades')])
+}
+
+export const gerarId = novoId
+
 export async function atualizarAtividade(id: string, p: Partial<Atividade>): Promise<void> {
   if (supabase) {
     const { error } = await supabase.from('atividades').update(p).eq('id', id)

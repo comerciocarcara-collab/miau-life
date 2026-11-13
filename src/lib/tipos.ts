@@ -33,9 +33,20 @@ export interface Atividade {
   concluida_em: string | null
   excluida_em: string | null // lixeira
   created_at: string
+  // Etapa 5 (podem não existir se o etapa5.sql ainda não rodou)
+  minutos?: number | null // tempo estimado
+  esforco?: Esforco | null
+  pai_id?: string | null // micropasso de uma tarefa maior
+  ordem?: number | null
+  adiada_ate?: string | null // "Depois": escondida até este dia (YYYY-MM-DD)
+  adiada_vezes?: number
+  deslocamento_min?: number | null // ida + volta de um compromisso
+  eh_deslocamento?: boolean // bloco de estrada / voo
 }
 
-export type NovaAtividade = Partial<Omit<Atividade, 'id' | 'created_at'>> & { titulo: string; tipo: TipoAtividade }
+export type Esforco = 'leve' | 'medio' | 'pesado'
+
+export type NovaAtividade = Partial<Omit<Atividade, 'id' | 'created_at'>> & { titulo: string; tipo: TipoAtividade; id?: string }
 
 /** Cada vez que uma meta flexível ou rotina é planejada (feito=false) ou feita (feito=true) num dia */
 export interface Ocorrencia {
@@ -60,6 +71,7 @@ export interface Cuidado {
   anterior_em: string | null // guarda o valor anterior para poder desfazer
   ativo: boolean
   created_at: string
+  versao_minima?: string | null // Etapa 5: o mínimo para dias de energia baixa
 }
 export type NovoCuidado = Pick<Cuidado, 'nome' | 'grupo' | 'frequencia_dias'> & Partial<Pick<Cuidado, 'area_id' | 'ultima_em'>>
 
@@ -97,3 +109,40 @@ export interface Receita {
   favorita: boolean
   created_at: string
 }
+
+// ---------- Etapa 5: Energia, pausas e viagens ----------
+export type NivelEnergia = 'baixa' | 'media' | 'boa'
+export type MarcaEnergia = 'dormi_bem' | 'agua' | 'comi' | 'cochilei'
+export interface Energia { id: string; dia: string; nivel: NivelEnergia; marcas: MarcaEnergia[]; created_at: string }
+
+export interface Pausa { id: string; area_id: string; de: string; ate: string; motivo: string | null; created_at: string }
+
+export interface Viagem {
+  id: string
+  destino: string
+  ida: string | null
+  volta: string | null
+  hospedagem: string | null
+  notas: string | null
+  pausar_estudos: boolean
+  created_at: string
+}
+export interface ViagemTrecho {
+  id: string
+  viagem_id: string
+  tipo: 'voo' | 'carro' | 'onibus' | 'pernoite'
+  origem: string | null
+  origem_nome: string | null
+  destino: string | null
+  destino_nome: string | null
+  numero: string | null
+  partida: string | null
+  chegada: string | null
+  aeroporto: string | null
+  portao: string | null
+  localizador: string | null
+  checkin_em: string | null
+  notas: string | null
+  created_at: string
+}
+export interface ViagemItem { id: string; viagem_id: string; tipo: 'checklist' | 'desejo'; nome: string; quando: string | null; feito: boolean; created_at: string }

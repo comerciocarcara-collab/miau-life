@@ -2,64 +2,88 @@
 
 /* ===== Cores do Miau Life (tema claro e tema noite) ===== */
 :root {
-  --c-fundo: #fff4ef;
-  --c-fundo-grad: linear-gradient(180deg, #fde3ec 0%, #fff0ee 45%, #fff7f1 100%);
+  /* Paleta da prévia aprovada pela Thaís (creme, rosa, lilás, verde, pêssego) */
+  --c-fundo: #fff7f2;
+  --c-fundo-grad: #fff7f2;
   --c-cartao: #ffffff;
-  --c-texto: #4a3a4a;
-  --c-suave: #7a6678;
-  --c-borda: #f6d9e2;
-  --c-titulo: #d63f78;
-  --c-rosa: #f7b6cb;
-  --c-lilas: #d5c4f0;
-  --c-verde: #c8e6d0;
-  --c-pessego: #ffd3b8;
-  --c-azul: #c5e1f2;
-  --c-amarelo: #fbe9a8;
-  --c-destaque: #e04f86;
-  --c-sombra: 0 6px 18px rgba(214, 90, 140, 0.12);
-  /* versões mais fortes, para pontinhos, selos e ícones */
-  --cf-rosa: #ee6a9b;
-  --cf-lilas: #9b7fd4;
-  --cf-verde: #5fb27a;
-  --cf-pessego: #f09a63;
-  --cf-azul: #5a9fd6;
-  --cf-amarelo: #d9a92a;
-  --cf-presenca: #e5456f;
+  --c-texto: #2d2433;
+  --c-suave: #6b5f73;
+  --c-borda: #f0e3dc;
+  --c-titulo: #2d2433;
+  --c-rosa: #fde3ea;
+  --c-lilas: #e9e4fb;
+  --c-verde: #ddf3e8;
+  --c-pessego: #ffe9d1;
+  --c-azul: #dcebf7;
+  --c-amarelo: #fff1c2;
+  --c-cinza: #ece8ee;
+  --c-destaque: #c8456a;
+  --c-sombra: none;
+  /* versões fortes: texto sobre o pastel, ícones, selos */
+  --cf-rosa: #8e2745;
+  --cf-lilas: #4b3ba6;
+  --cf-verde: #1f5c41;
+  --cf-pessego: #8a4b0f;
+  --cf-azul: #1f4f7a;
+  --cf-amarelo: #7a5a0a;
+  --cf-cinza: #4a3f52;
+  --cf-presenca: #c8456a;
+  --c-trilho: #f6efea;
 }
 :root[data-tema='noite'] {
-  --c-fundo: #231c2b;
-  --c-fundo-grad: #231c2b;
-  --c-cartao: #2e2538;
+  --c-fundo: #211a28;
+  --c-fundo-grad: #211a28;
+  --c-cartao: #2c2435;
   --c-texto: #f6ecf3;
-  --c-suave: #bfb0c2;
+  --c-suave: #c2b3c6;
   --c-borda: #43364f;
-  --c-titulo: #f59bbd;
-  --c-rosa: #c9809c;
-  --c-lilas: #9a86c4;
-  --c-verde: #7fae8c;
-  --c-pessego: #d29a7c;
-  --c-azul: #7fa9c4;
-  --c-amarelo: #c9b56a;
-  --c-destaque: #f2a3c0;
-  --c-sombra: 0 6px 20px rgba(0, 0, 0, 0.35);
+  --c-titulo: #f6ecf3;
+  --c-rosa: #5a2c3f;
+  --c-lilas: #3c3463;
+  --c-verde: #23473a;
+  --c-pessego: #574026;
+  --c-azul: #26405a;
+  --c-amarelo: #514520;
+  --c-cinza: #3a3242;
+  --c-destaque: #f08aa8;
+  --c-sombra: none;
+  --cf-rosa: #ffc2d3;
+  --cf-lilas: #d3cbff;
+  --cf-verde: #a9e6c8;
+  --cf-pessego: #ffd2a6;
+  --cf-azul: #b9daf5;
+  --cf-amarelo: #f2dc8f;
+  --cf-cinza: #ddd3e3;
+  --cf-presenca: #f08aa8;
+  --c-trilho: #3a3242;
 }
 @media (prefers-color-scheme: dark) {
   :root[data-tema='auto'] {
-    --c-fundo: #231c2b;
-    --c-fundo-grad: #231c2b;
-    --c-cartao: #2e2538;
+    --c-fundo: #211a28;
+    --c-fundo-grad: #211a28;
+    --c-cartao: #2c2435;
     --c-texto: #f6ecf3;
-    --c-suave: #bfb0c2;
+    --c-suave: #c2b3c6;
     --c-borda: #43364f;
-    --c-titulo: #f59bbd;
-    --c-rosa: #c9809c;
-    --c-lilas: #9a86c4;
-    --c-verde: #7fae8c;
-    --c-pessego: #d29a7c;
-    --c-azul: #7fa9c4;
-    --c-amarelo: #c9b56a;
-    --c-destaque: #f2a3c0;
-    --c-sombra: 0 6px 20px rgba(0, 0, 0, 0.35);
+    --c-titulo: #f6ecf3;
+    --c-rosa: #5a2c3f;
+    --c-lilas: #3c3463;
+    --c-verde: #23473a;
+    --c-pessego: #574026;
+    --c-azul: #26405a;
+    --c-amarelo: #514520;
+    --c-cinza: #3a3242;
+    --c-destaque: #f08aa8;
+    --c-sombra: none;
+    --cf-rosa: #ffc2d3;
+    --cf-lilas: #d3cbff;
+    --cf-verde: #a9e6c8;
+    --cf-pessego: #ffd2a6;
+    --cf-azul: #b9daf5;
+    --cf-amarelo: #f2dc8f;
+    --cf-cinza: #ddd3e3;
+    --cf-presenca: #f08aa8;
+    --c-trilho: #3a3242;
   }
 }
 
@@ -75,10 +99,19 @@
   --color-pessego: var(--c-pessego);
   --color-azul: var(--c-azul);
   --color-amarelo: var(--c-amarelo);
+  --color-cinza: var(--c-cinza);
+  --color-trilho: var(--c-trilho);
+  --color-forte-rosa: var(--cf-rosa);
+  --color-forte-lilas: var(--cf-lilas);
+  --color-forte-verde: var(--cf-verde);
+  --color-forte-pessego: var(--cf-pessego);
+  --color-forte-azul: var(--cf-azul);
+  --color-forte-amarelo: var(--cf-amarelo);
+  --color-forte-cinza: var(--cf-cinza);
   --color-destaque: var(--c-destaque);
   --color-titulo: var(--c-titulo);
   --font-sans: 'Nunito', ui-rounded, 'Hiragino Maru Gothic ProN', system-ui, sans-serif;
-  --font-display: 'Fredoka', 'Nunito', ui-rounded, system-ui, sans-serif;
+  --font-display: 'Nunito', ui-rounded, system-ui, sans-serif;
 }
 
 html,
@@ -109,14 +142,14 @@ h1,
 h2,
 h3 {
   font-family: var(--font-display);
+  font-weight: 800;
 }
 
 /* ===== Peças reutilizáveis ===== */
 .cartao {
-  background: color-mix(in srgb, var(--c-cartao) 90%, transparent);
-  border: 1.5px solid color-mix(in srgb, var(--c-rosa) 45%, transparent);
-  border-radius: 22px;
-  box-shadow: var(--c-sombra);
+  background: var(--c-cartao);
+  border: 2px solid var(--c-borda);
+  border-radius: 20px;
 }
 .cor-rosa { --cor: var(--c-rosa); --forte: var(--cf-rosa); }
 .cor-lilas { --cor: var(--c-lilas); --forte: var(--cf-lilas); }
@@ -124,15 +157,17 @@ h3 {
 .cor-pessego { --cor: var(--c-pessego); --forte: var(--cf-pessego); }
 .cor-azul { --cor: var(--c-azul); --forte: var(--cf-azul); }
 .cor-amarelo { --cor: var(--c-amarelo); --forte: var(--cf-amarelo); }
+.cor-cinza { --cor: var(--c-cinza); --forte: var(--cf-cinza); }
+/* etiqueta/bloco pastel com texto forte da mesma cor (Casa, Estudos, janela livre...) */
+.tom { background: var(--cor); color: var(--forte); }
 .cartao-area {
-  background: linear-gradient(160deg, color-mix(in srgb, var(--cor) 55%, var(--c-cartao)), color-mix(in srgb, var(--cor) 25%, var(--c-cartao)));
-  border: 1.5px solid color-mix(in srgb, var(--cor) 80%, transparent);
-  border-radius: 22px;
-  box-shadow: var(--c-sombra);
+  background: var(--cor);
+  border: 2px solid color-mix(in srgb, var(--forte) 14%, var(--cor));
+  border-radius: 20px;
 }
 .icone-forte { color: var(--forte); }
 .bolinha {
-  background: color-mix(in srgb, var(--cor) 70%, var(--c-cartao));
+  background: color-mix(in srgb, var(--forte) 45%, var(--cor));
 }
 .selo {
   display: grid;
@@ -156,28 +191,52 @@ h3 {
   min-height: 48px;
   padding: 0 22px;
   border: 0;
-  border-radius: 999px;
-  background: var(--c-rosa);
-  color: #4a3a4a;
+  border-radius: 16px;
+  background: var(--c-destaque);
+  color: #fff;
   font-weight: 800;
 }
-:root[data-tema='noite'] .btn { color: #231c2b; }
+:root[data-tema='noite'] .btn { color: #211a28; }
 @media (prefers-color-scheme: dark) {
-  :root[data-tema='auto'] .btn { color: #231c2b; }
+  :root[data-tema='auto'] .btn { color: #211a28; }
 }
 .btn:active { transform: scale(0.97); }
 .btn:disabled { opacity: 0.55; }
 .btn-suave {
-  background: transparent;
-  border: 1.5px solid var(--c-borda);
+  background: var(--c-cartao);
+  border: 2px solid var(--c-borda);
   color: var(--c-texto) !important;
+}
+/* botão tracejado ("Só 10 minutos") */
+.btn-tracejado {
+  background: var(--c-fundo);
+  border: 2px dashed var(--c-destaque);
+  color: var(--cf-rosa) !important;
+}
+/* chip arredondado que liga/desliga (Dormi bem, Bebi água...) */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 2px solid var(--c-borda);
+  background: var(--c-cartao);
+  font-weight: 700;
+  font-size: 14px;
+}
+.chip[aria-pressed='true'] {
+  border-color: var(--c-destaque);
+  background: var(--c-rosa);
+  color: var(--cf-rosa);
 }
 .campo {
   width: 100%;
   box-sizing: border-box;
   min-height: 48px;
   padding: 0 16px;
-  border: 1.5px solid var(--c-borda);
+  border: 2px solid var(--c-borda);
   border-radius: 16px;
   background: var(--c-cartao);
   outline: none;
@@ -188,27 +247,21 @@ textarea.campo { padding: 12px 16px; min-height: 80px; resize: vertical; }
 
 .titulo-miau {
   font-family: var(--font-display);
-  font-weight: 700;
-  color: var(--c-titulo);
-  -webkit-text-stroke: 4px #fff;
-  paint-order: stroke fill;
-  letter-spacing: 0.2px;
-}
-:root[data-tema='noite'] .titulo-miau { -webkit-text-stroke: 0; }
-@media (prefers-color-scheme: dark) {
-  :root[data-tema='auto'] .titulo-miau { -webkit-text-stroke: 0; }
+  font-weight: 800;
+  color: var(--c-destaque);
+  letter-spacing: -0.2px;
 }
 
 .barra-trilho {
-  height: 10px;
+  height: 8px;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--c-verde) 45%, transparent);
+  background: var(--c-trilho);
   overflow: hidden;
 }
 .barra-valor {
   height: 100%;
   border-radius: 999px;
-  background: linear-gradient(90deg, #7fcf98, #5fb27a);
+  background: var(--c-destaque);
   transition: width 0.4s ease;
 }
 
@@ -224,8 +277,8 @@ textarea.campo { padding: 12px 16px; min-height: 80px; resize: vertical; }
   color: #fff;
 }
 .caixa-marca[data-on='true'] {
-  background: var(--cf-verde);
-  border-color: var(--cf-verde);
+  background: var(--c-destaque);
+  border-color: var(--c-destaque);
 }
 
 .fab {
@@ -238,10 +291,10 @@ textarea.campo { padding: 12px 16px; min-height: 80px; resize: vertical; }
   width: 58px;
   height: 58px;
   border: 0;
-  border-radius: 999px;
-  background: linear-gradient(145deg, #f98bb3, #ee5f93);
+  border-radius: 20px;
+  background: var(--c-destaque);
   color: #fff;
-  box-shadow: 0 8px 20px rgba(238, 95, 147, 0.45);
+  box-shadow: 0 6px 16px rgba(200, 69, 106, 0.3);
 }
 @media (min-width: 768px) {
   .fab { bottom: 28px; right: 32px; }
@@ -268,3 +321,18 @@ textarea.campo { padding: 12px 16px; min-height: 80px; resize: vertical; }
   50% { transform: translateY(-6px); }
 }
 .pulinho { animation: pulinho 1.1s ease-in-out infinite; }
+
+@keyframes petisco {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.25) rotate(-6deg); }
+  100% { transform: scale(1); }
+}
+.petisco { animation: petisco 0.5s ease-out; }
+@keyframes entrar {
+  from { transform: translateY(12px) scale(0.98); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+.entrar { animation: entrar 0.25s ease-out; }
+@media (prefers-reduced-motion: reduce) {
+  .petisco, .entrar, .folha, .pulinho { animation: none; }
+}
