@@ -1,29 +1,28 @@
 import { useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { AlertTriangle, CalendarPlus, Check, ChevronDown, ChevronLeft, ChevronRight, Clock, MapPin, SlidersHorizontal, Target } from 'lucide-react'
+import { CalendarPlus, Check, ChevronDown, ChevronLeft, ChevronRight, MapPin, SlidersHorizontal } from 'lucide-react'
 import { useApp } from '../lib/ContextoApp'
 import { useForm } from '../componentes/ContextoForm'
-import ItemCartao, { CaixaMarca, useAlternar } from '../componentes/ItemCartao'
-import { GatoRosto } from '../componentes/Gatinhos'
+import ItemCartao from '../componentes/ItemCartao'
 import { Icone, nomeIconeArea } from '../lib/icones'
-import { conflitosDoDia, itensDoDia, type ItemDia } from '../lib/agenda'
+import { itensDoDia, type ItemDia } from '../lib/agenda'
+import DiaLinhaDoTempo from '../componentes/agenda/DiaLinhaDoTempo'
 import { dataCurta, dataLonga, diasDaSemana, gradeDoMes, hojeISO, iso, nomeDiaCurto, nomeMes, parseISO, SEMANA_SEG, somarDias } from '../lib/datas'
 
 type Vista = 'mes' | 'semana' | 'dia' | 'lista'
 const VISTAS: { id: Vista; rotulo: string }[] = [
-  { id: 'mes', rotulo: 'Mês' },
-  { id: 'semana', rotulo: 'Semana' },
   { id: 'dia', rotulo: 'Dia' },
+  { id: 'semana', rotulo: 'Semana' },
+  { id: 'mes', rotulo: 'Mês' },
   { id: 'lista', rotulo: 'Lista' },
 ]
 
 export default function Agenda() {
   const [params, setParams] = useSearchParams()
   const { areas, atividades, ocorrencias } = useApp()
-  const { abrirForm } = useForm()
   const hoje = hojeISO()
 
-  const vista = (VISTAS.find((v) => v.id === params.get('vista'))?.id ?? 'mes') as Vista
+  const vista = (VISTAS.find((v) => v.id === params.get('vista'))?.id ?? 'dia') as Vista
   const dia = params.get('dia') ?? hoje
   const areaParam = params.get('area')
   const areaFiltro = areas.find((a) => a.id === areaParam) ?? null
@@ -74,7 +73,7 @@ export default function Agenda() {
           aria-label="Escolher calendário"
         >
           <CalendarPlus size={30} className="text-titulo" />
-          <h1 className="m-0 text-2xl font-semibold text-titulo">{areaFiltro ? areaFiltro.nome : 'Calendário Geral'}</h1>
+          <h1 className="m-0 text-2xl font-semibold text-titulo">{areaFiltro ? areaFiltro.nome : 'Agenda'}</h1>
           <ChevronDown size={22} className="text-titulo" />
         </button>
         <button onClick={() => setFiltros(!filtros)} aria-label="Filtros" aria-pressed={filtros} className="cartao grid h-11 w-11 place-items-center !rounded-full border-0">
@@ -83,7 +82,7 @@ export default function Agenda() {
         {menuAberto && (
           <div className="cartao absolute left-0 top-12 z-20 w-64 !bg-cartao p-2">
             <button className="flex w-full items-center gap-2 rounded-xl border-0 bg-transparent px-3 py-2.5 text-left font-bold hover:bg-rosa/20" onClick={() => { ir({ area: null }); setMenuAberto(false) }}>
-              <CalendarPlus size={20} /> Calendário Geral
+              <CalendarPlus size={20} /> Agenda geral
             </button>
             {ativas.map((a) => (
               <button key={a.id} className="flex w-full items-center gap-2 rounded-xl border-0 bg-transparent px-3 py-2.5 text-left font-bold hover:bg-rosa/20" onClick={() => { ir({ area: a.id }); setMenuAberto(false) }}>
@@ -110,7 +109,7 @@ export default function Agenda() {
 
       {vista === 'mes' && <VistaMes dia={dia} hoje={hoje} itensDe={itensDe} ir={ir} />}
       {vista === 'semana' && <VistaSemana dia={dia} hoje={hoje} itensDe={itensDe} ir={ir} />}
-      {vista === 'dia' && <VistaDia dia={dia} hoje={hoje} itensDe={itensDe} ir={ir} />}
+      {vista === 'dia' && <DiaLinhaDoTempo dia={dia} itens={itensDe(dia)} ir={ir} />}
       {vista === 'lista' && <VistaLista dia={dia} hoje={hoje} itensDe={itensDe} />}
 
       {(vista === 'mes' || filtros) && (
@@ -283,100 +282,6 @@ function VistaSemana({ dia, hoje, itensDe, ir }: PropsVista) {
           </div>
         )
       })}
-    </section>
-  )
-}
-
-// ---------------- DIA ----------------
-function VistaDia({ dia, hoje, itensDe, ir }: PropsVista) {
-  const { areas } = useApp()
-  const { abrirForm } = useForm()
-  const alternar = useAlternar()
-  const itens = itensDe(dia)
-  const conflitos = conflitosDoDia(itens)
-  const comHora = itens.filter((i) => i.hora)
-  const semHora = itens.filter((i) => !i.hora)
-  const nPresencas = itens.filter((i) => i.categoria === 'presenca').length
-  const nPrazos = itens.filter((i) => i.categoria === 'prazo').length
-  const nFlex = itens.filter((i) => i.categoria === 'flexivel').length
-
-  return (
-    <section className="flex flex-col gap-3" aria-label="Agenda do dia">
-      <div className="cartao flex items-center justify-between p-2">
-        <button aria-label="Dia anterior" className="grid h-10 w-10 place-items-center rounded-full border-0 bg-transparent" onClick={() => ir({ dia: somarDias(dia, -1) })}>
-          <ChevronLeft className="text-titulo" />
-        </button>
-        <button onClick={() => ir({ dia: hoje })} className="border-0 bg-transparent font-display text-xl font-semibold text-titulo" aria-label="Voltar para hoje">
-          {dataLonga(dia)}
-        </button>
-        <button aria-label="Próximo dia" className="grid h-10 w-10 place-items-center rounded-full border-0 bg-transparent" onClick={() => ir({ dia: somarDias(dia, 1) })}>
-          <ChevronRight className="text-titulo" />
-        </button>
-      </div>
-
-      <div className="grid grid-cols-3 gap-2 text-center text-xs font-extrabold">
-        <div className="cartao flex flex-col items-center gap-1 p-2"><MapPin size={20} style={{ color: 'var(--cf-presenca)' }} />{nPresencas} {nPresencas === 1 ? 'Presença' : 'Presenças'}<span className="font-semibold text-suave">obrigatórias</span></div>
-        <div className="cartao flex flex-col items-center gap-1 p-2"><Clock size={20} className="text-amber-500" />{nPrazos} {nPrazos === 1 ? 'Tarefa' : 'Tarefas'}<span className="font-semibold text-suave">com prazo</span></div>
-        <div className="cartao flex flex-col items-center gap-1 p-2"><Target size={20} className="text-emerald-500" />{nFlex} {nFlex === 1 ? 'Tarefa' : 'Tarefas'}<span className="font-semibold text-suave">flexíveis</span></div>
-      </div>
-
-      {conflitos.length > 0 && (
-        <div role="alert" className="flex items-start gap-3 rounded-2xl bg-pessego/70 px-4 py-3 text-sm">
-          <AlertTriangle size={20} className="mt-0.5 shrink-0 text-titulo" />
-          <span>
-            <b>Atenção, conflito de horário:</b>{' '}
-            {conflitos.map((c) => `${c.a.atividade.titulo} (${c.a.hora}) e ${c.b.atividade.titulo} (${c.b.hora})`).join('; ')}.
-          </span>
-        </div>
-      )}
-
-      {itens.length === 0 && (
-        <div className="cartao flex flex-col items-center gap-2 p-6 text-center">
-          <GatoRosto className="h-24 w-32" olhos="feliz" />
-          <p className="m-0 font-bold">Nada marcado para este dia</p>
-          <p className="m-0 text-sm text-suave">Um dia livre, miau!</p>
-        </div>
-      )}
-
-      {comHora.length > 0 && (
-        <ol className="relative m-0 flex list-none flex-col gap-3 p-0">
-          <span className="absolute bottom-2 top-2 w-0.5 rounded bg-rosa/60" style={{ left: 33 }} aria-hidden />
-          {comHora.map((i) => (
-            <li key={i.chave} className="relative flex items-start gap-3">
-              <span className="z-[1] w-[68px] shrink-0 rounded-full py-1.5 text-center text-sm font-extrabold text-white" style={{ background: corDoItem(i, areas) }}>
-                {i.hora}
-              </span>
-              <div className="min-w-0 flex-1">
-                <ItemCartao item={i} aoAbrir={() => abrirForm({ editar: i.atividade })} />
-              </div>
-            </li>
-          ))}
-        </ol>
-      )}
-
-      {semHora.length > 0 && (
-        <div className="cartao p-4">
-          <h2 className="m-0 mb-3 flex items-center gap-2 text-lg font-semibold text-titulo">
-            <Check size={22} className="rounded-full bg-emerald-500 p-0.5 text-white" /> Outras tarefas do dia
-          </h2>
-          <ul className="m-0 flex list-none flex-col gap-1 p-0">
-            {semHora.map((i) => (
-              <li key={i.chave} className="flex items-center gap-3 border-b border-borda py-2.5 last:border-0">
-                <CaixaMarca ligada={i.feito} aoClicar={() => alternar(i)} rotulo={i.feito ? `Desmarcar ${i.atividade.titulo}` : `Concluir ${i.atividade.titulo}`} />
-                <button onClick={() => abrirForm({ editar: i.atividade })} className={`flex-1 border-0 bg-transparent p-0 text-left font-bold ${i.feito ? 'line-through opacity-60' : ''}`}>
-                  {i.atividade.titulo}
-                </button>
-                {i.categoria === 'prazo' && <span className="text-xs font-bold text-amber-600">prazo</span>}
-                {i.categoria === 'flexivel' && <span className="text-xs font-bold text-emerald-600">meta</span>}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      <button className="btn btn-suave self-center" onClick={() => abrirForm({ dia, tipoInicial: 'agendada' })}>
-        <CalendarPlus size={18} /> Adicionar neste dia
-      </button>
     </section>
   )
 }

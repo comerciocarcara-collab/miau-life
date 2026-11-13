@@ -1,0 +1,31 @@
+name: Manter o Supabase acordado
+
+# O Supabase gratuito pausa projetos que ficam 7 dias sem uso.
+# Este robozinho faz uma consulta leve a cada 3 dias para isso não acontecer.
+on:
+  schedule:
+    - cron: '17 11 */3 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  cutucar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Consulta leve no banco
+        env:
+          URL: ${{ secrets.VITE_SUPABASE_URL }}
+          KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+        run: |
+          if [ -z "$URL" ] || [ -z "$KEY" ]; then
+            echo "Segredos do Supabase não configurados; nada a fazer."
+            exit 0
+          fi
+          # função criada pelo etapa5.sql
+          curl -sS -o /dev/null -w "rpc: %{http_code}\n" -X POST "$URL/rest/v1/rpc/manter_acordado" \
+            -H "apikey: $KEY" -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" -d '{}' || true
+          # consulta simples (funciona mesmo antes do etapa5.sql)
+          curl -sS -o /dev/null -w "areas: %{http_code}\n" "$URL/rest/v1/areas?select=id&limit=1" \
+            -H "apikey: $KEY" -H "Authorization: Bearer $KEY" || true
