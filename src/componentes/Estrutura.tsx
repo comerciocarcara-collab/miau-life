@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import { CalendarDays, ChartColumn, Cat, House, LayoutGrid, Plane, Plus, Settings, Sparkles, SquareCheckBig, WandSparkles } from 'lucide-react'
 import { useApp } from '../lib/ContextoApp'
 import { Icone, nomeIconeArea } from '../lib/icones'
@@ -38,6 +38,7 @@ export default function Estrutura({ children }: { children: ReactNode }) {
 function Casca({ children }: { children: ReactNode }) {
   const { areas } = useApp()
   const { abrirForm } = useForm()
+  const esconderFab = useLocation().pathname.startsWith('/importar')
 
   return (
     <div className="min-h-screen md:grid md:grid-cols-[260px_1fr]">
@@ -77,9 +78,10 @@ function Casca({ children }: { children: ReactNode }) {
 
       <main className="mx-auto w-full max-w-3xl px-4 pb-40 pt-[calc(1rem+env(safe-area-inset-top))] md:px-8 md:pb-24">{children}</main>
 
-      <button className="fab" onClick={() => abrirForm()} aria-label="Nova atividade">
+      {/* Em "Organizar com IA" o botão cobriria o "Guardar tudo" */}
+      {!esconderFab && <button className="fab" onClick={() => abrirForm()} aria-label="Nova atividade">
         <Plus size={30} strokeWidth={3} />
-      </button>
+      </button>}
 
       {/* Barra de baixo: aparece no celular */}
       <nav className="barra-baixo fixed inset-x-0 bottom-0 z-30 border-t border-borda bg-cartao md:hidden" aria-label="Menu principal">

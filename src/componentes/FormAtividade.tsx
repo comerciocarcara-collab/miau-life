@@ -3,7 +3,7 @@ import { CalendarCheck, CalendarClock, Inbox, MapPin, Repeat, Target } from 'luc
 import Folha from './Folha'
 import { useApp } from '../lib/ContextoApp'
 import { combinar, hhmm, hojeISO, SEMANA_SEG } from '../lib/datas'
-import type { Atividade, NovaAtividade, TipoAtividade } from '../lib/tipos'
+import type { Atividade, Esforco, NovaAtividade, TipoAtividade } from '../lib/tipos'
 
 export interface OpcoesForm {
   editar?: Atividade | null
@@ -21,11 +21,18 @@ const TIPOS: { id: TipoAtividade; rotulo: string; dica: string; icone: ReactNode
   { id: 'caixa', rotulo: 'Só anotar', dica: 'Decido depois', icone: <Inbox size={20} /> },
 ]
 
+const MINUTOS = [5, 10, 20, 30, 60]
+const ESFORCOS: { id: Esforco; rotulo: string }[] = [
+  { id: 'leve', rotulo: 'Leve' },
+  { id: 'medio', rotulo: 'Médio' },
+  { id: 'pesado', rotulo: 'Pesado' },
+]
+
 // Ordem dos botões de dia: segunda a domingo, mas o valor guardado é 0=Dom ... 6=Sáb
 const VALOR_DIA = [1, 2, 3, 4, 5, 6, 0]
 
 export default function FormAtividade({ editar, tipoInicial, areaId, dia: diaInicial, aoFechar }: OpcoesForm & { aoFechar: () => void }) {
-  const { areas, criar, atualizar } = useApp()
+  const { areas, criar, atualizar, etapa5 } = useApp()
   const [tipo, setTipo] = useState<TipoAtividade>(editar?.tipo ?? tipoInicial ?? 'compromisso')
   const [titulo, setTitulo] = useState(editar?.titulo ?? '')
   const [area, setArea] = useState(editar?.area_id ?? areaId ?? '')
@@ -40,6 +47,10 @@ export default function FormAtividade({ editar, tipoInicial, areaId, dia: diaIni
   const [lembrete, setLembrete] = useState<string>(editar?.lembrete_min != null ? String(editar.lembrete_min) : '')
   const [importante, setImportante] = useState(editar?.prioridade === 'alta')
   const [notas, setNotas] = useState(editar?.descricao ?? '')
+  const [minutos, setMinutos] = useState<string>(editar?.minutos != null ? String(editar.minutos) : '')
+  const [esforco, setEsforco] = useState<Esforco | ''>(editar?.esforco ?? '')
+  const [deslocamento, setDeslocamento] = useState<string>(editar?.deslocamento_min != null ? String(editar.deslocamento_min) : '')
+  const [ehDeslocamento, setEhDeslocamento] = useState(!!editar?.eh_deslocamento)
   const [erro, setErro] = useState<string | null>(null)
   const [salvando, setSalvando] = useState(false)
 
@@ -70,6 +81,21 @@ export default function FormAtividade({ editar, tipoInicial, areaId, dia: diaIni
       local: tipo === 'compromisso' ? local.trim() || null : null,
       endereco: tipo === 'compromisso' ? endereco.trim() || null : null,
       lembrete_min: comHorario && lembrete !== '' ? Number(lembrete) : null,
+    }
+    // Campos da Etapa 5: só vão para o banco depois do etapa5.sql (senão o Supabase recusa).
+    if (etapa5) {
+      const min = Number(minutos)
+      if (tipo !== 'compromisso') {
+        if (minutos !== '' && min > 0) p.minutos = Math.round(min)
+        else if (editar?.minutos != null) p.minutos = null
+        if (esforco) p.esforco = esforco
+        else if (editar?.esforco) p.esforco = null
+      } else {
+        const d = Number(deslocamento)
+        if (deslocamento !== '' && d >= 0) p.deslocamento_min = Math.round(d)
+        else if (editar?.deslocamento_min != null) p.deslocamento_min = null
+        if (ehDeslocamento || editar?.eh_deslocamento) p.eh_deslocamento = ehDeslocamento
+      }
     }
     setSalvando(true)
     try {
@@ -221,6 +247,65 @@ export default function FormAtividade({ editar, tipoInicial, areaId, dia: diaIni
               })}
             </div>
           </div>
+        )}
+
+        {etapa5 && tipo !== 'compromisso' && (
+          <>
+            <div>
+              <span className="rotulo">Quanto tempo leva? (opcional)</span>
+              <div className="flex flex-wrap items-center gap-2">
+                {MINUTOS.map((m) => (
+                  <button type="button" key={m} className="chip" aria-pressed={minutos === String(m)} onClick={() => setMinutos(minutos === String(m) ? '' : String(m))}>
+                    {m === 60 ? '1h' : `${m} min`}
+                  </button>
+                ))}
+                <input
+                  type="number"
+                  inputMode="numeric"
+                  min={1}
+                  aria-label="Outro tempo, em minutos"
+                  placeholder="outro"
+                  className="campo !w-24 !min-h-11"
+                  value={MINUTOS.includes(Number(minutos)) ? '' : minutos}
+                  onChange={(e) => setMinutos(e.target.value)}
+                />
+              </div>
+            </div>
+            <div>
+              <span className="rotulo">Esforço (opcional)</span>
+              <div className="flex flex-wrap gap-2">
+                {ESFORCOS.map((x) => (
+                  <button type="button" key={x.id} className="chip" aria-pressed={esforco === x.id} onClick={() => setEsforco(esforco === x.id ? '' : x.id)}>
+                    {x.rotulo}
+                  </button>
+                ))}
+              </div>
+              <p className="mb-0 mt-1 text-xs text-suave">Nos dias de energia baixa, o app mostra só o que é leve ou rápido.</p>
+            </div>
+          </>
+        )}
+
+        {etapa5 && tipo === 'compromisso' && (
+          <>
+            <div>
+              <label className="rotulo" htmlFor="ativ-desloc">Tempo de estrada, ida + volta (minutos)</label>
+              <input
+                id="ativ-desloc"
+                type="number"
+                inputMode="numeric"
+                min={0}
+                className="campo"
+                value={deslocamento}
+                onChange={(e) => setDeslocamento(e.target.value)}
+                placeholder="Ex.: 40"
+              />
+              <p className="mb-0 mt-1 text-xs text-suave">A agenda já separa esse tempo antes e depois do compromisso.</p>
+            </div>
+            <label className="flex items-center gap-3 font-bold">
+              <input type="checkbox" checked={ehDeslocamento} onChange={(e) => setEhDeslocamento(e.target.checked)} className="h-5 w-5 accent-[var(--c-destaque)]" />
+              É um deslocamento (estrada ou voo)
+            </label>
+          </>
         )}
 
         {tipo !== 'caixa' && (
