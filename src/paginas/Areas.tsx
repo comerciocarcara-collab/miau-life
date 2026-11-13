@@ -56,7 +56,7 @@ export default function Areas() {
           </Link>
         </div>
       </div>
-      <p className="m-0 text-sm text-suave">Mude nome, cor, ícone e ordem do jeito que combinar com a sua vida. As primeiras seis aparecem grandes no Início.</p>
+      <p className="m-0 text-sm text-suave">Mude nome, cor, ícone e ordem do jeito que combinar com a sua vida. A ordem daqui é a mesma da tela Áreas.</p>
       {erro && <p className="m-0 rounded-2xl bg-pessego/60 px-4 py-3 text-sm">{erro}</p>}
 
       <ul className="m-0 flex list-none flex-col gap-3 p-0">

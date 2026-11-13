@@ -1,3 +1,25 @@
+# 🐾 Miau Life — Etapa 5: o que fazer agora
+
+O app mudou de casa e ganhou o jeito "uma coisa por vez". Endereço novo:
+**https://vetclinvila-dotcom.github.io/miaulife/** (o banco no Supabase é o mesmo, então os dados e o login continuam).
+
+1. **Rodar o `etapa5.sql`** — Supabase → projeto **MiauLife** → **SQL Editor** → **+** → *Create a new snippet* → cole todo o arquivo `supabase/etapa5.sql` → **Run**. Pode rodar mais de uma vez. (Se o `etapa4.sql` ainda não tinha rodado, rode ele antes.)
+2. **Conferir o GitHub** do repositório `miaulife`: **Settings → Pages → Source = GitHub Actions** e os dois segredos `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` em **Settings → Secrets and variables → Actions**.
+3. **No iPhone:** abra o endereço novo no Safari → Compartilhar → **Adicionar à Tela de Início** (pode apagar o ícone antigo).
+
+### O que tem de novo
+
+- **Energia:** toque em Baixa, Média ou Boa. Baixa mostra 1 tarefa leve; Média até 2; Boa até 3. Dá para refazer à tarde.
+- **Agora:** uma tarefa por vez, com **Feito**, **Depois**, **Quebrar em partes** e **Só 10 minutos**. Cada coisa feita vira petisco pro gatinho. Quando cumpre o combinado do dia, o app comemora e não cobra mais nada.
+- **Organizar com IA:** copie o prompt pronto, cole no ChatGPT (ou outra IA) junto com tudo que está acumulado, cole a resposta de volta no app, confira e guarde. Também dá para despejar na mão (uma linha = uma tarefa).
+- **Agenda do dia:** linha do tempo com compromissos, tempo dirigindo (já descontado) e **janelas livres** que mostram o que cabe nelas.
+- **Início com a bonequinha** e os cuidados do dia (cabelo, unha, academia...) com um toque.
+- **Viagem:** cartão de embarque dos voos, pernoite, checklist e desejos. Durante a viagem, Estudos ficam pausados.
+- **Áreas:** a grade das áreas agora fica na aba **Áreas**.
+- **Supabase acordado:** um robozinho no GitHub consulta o banco a cada 3 dias, para o plano grátis não pausar o projeto.
+
+---
+
 # 🐾 Miau Life — Etapa 1 (Fundação): passo a passo
 
 Você **não precisa instalar nada** no computador. São 4 partes: **Supabase** (guarda seus dados), **GitHub** (guarda o app e publica o site), **abrir no iPhone/PC** e **criar sua conta**. Vá com calma, uma parte de cada vez. Se algo for diferente do que está escrito aqui, me mande um print.
@@ -82,7 +104,9 @@ Você **não precisa instalar nada** no computador. São 4 partes: **Supabase** 
 
 **Etapa 4 (pronta):** *Vida Fit* com água do dia, medidas e gráfico de peso, treinos por dia da semana e receitas. Rode `supabase/etapa4.sql` antes de subir os arquivos.
 
-**Próximas:** 5 Notificações · depois Estudos + Trabalho · Miau IA · Pets · Financeiro · Fazenda · Viagens + Projetos · Integrações (Google Agenda, cópia em planilha, offline).
+**Etapa 5 (pronta):** energia, "Só 1 coisa agora", organizar com IA, agenda do dia, Início com a bonequinha e Viagem (veja o topo deste arquivo).
+
+**Próximas:** Notificações · depois Estudos + Trabalho · Miau IA · Pets · Financeiro · Fazenda · Viagens + Projetos · Integrações (Google Agenda, cópia em planilha, offline).
 
 ---
 *Para o futuro: este projeto usa React + TypeScript + Vite + Tailwind + Supabase. Você não precisa mexer nisso.*
