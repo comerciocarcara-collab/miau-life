@@ -2,10 +2,9 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronRight } from 'lucide-react'
 import { useApp } from '../lib/ContextoApp'
-import { tabAtualizar } from '../lib/dados'
 import { energiaDeHoje } from '../lib/fila'
 import { hhmm, hojeISO } from '../lib/datas'
-import type { Energia, MarcaEnergia, NivelEnergia } from '../lib/tipos'
+import type { MarcaEnergia, NivelEnergia } from '../lib/tipos'
 import { EscolhaEnergia, dataPorExtenso, textoLimite } from '../componentes/agora/Pecas'
 
 const MARCAS: { id: MarcaEnergia; nome: string }[] = [
@@ -17,32 +16,27 @@ const MARCAS: { id: MarcaEnergia; nome: string }[] = [
 
 /** Check-in de energia: define quantas tarefas o app mostra hoje. Pode refazer quantas vezes quiser. */
 export default function Energia() {
-  const { energias, registrarEnergia } = useApp()
+  const { energias, registrarEnergia, marcarEnergia } = useApp()
   const hoje = hojeISO()
   const atual = energiaDeHoje(energias, hoje)
   const [escolhido, setEscolhido] = useState<NivelEnergia | null>(null)
-  const [marcasLocais, setMarcasLocais] = useState<MarcaEnergia[] | null>(null)
-  const [registroId, setRegistroId] = useState<string | null>(null)
+  // marcas escolhidas antes do primeiro check-in do dia (vão junto quando escolher o nível)
+  const [marcasAntes, setMarcasAntes] = useState<MarcaEnergia[]>([])
 
   const nivel = escolhido ?? atual?.nivel ?? null
-  const marcas = marcasLocais ?? atual?.marcas ?? []
+  const marcas = atual?.marcas ?? marcasAntes
   const checkinsHoje = energias.filter((e) => e.dia === hoje).length
 
   async function escolher(n: NivelEnergia) {
     setEscolhido(n)
     await registrarEnergia(n, marcas)
-    setRegistroId(null) // o novo registro passa a ser o "atual"
   }
 
   function alternarMarca(m: MarcaEnergia) {
     const novas = marcas.includes(m) ? marcas.filter((x) => x !== m) : [...marcas, m]
-    setMarcasLocais(novas)
-    // atualiza o check-in mais recente de hoje (sem criar um novo a cada toque)
-    const id = registroId ?? atual?.id
-    if (nivel && id && !id.startsWith('tmp-')) {
-      setRegistroId(id)
-      void tabAtualizar<Energia>('energia', id, { marcas: novas }).catch(() => undefined)
-    }
+    // com check-in hoje: atualiza o mais recente (sem criar um novo a cada toque)
+    if (atual) void marcarEnergia(atual.id, novas)
+    else setMarcasAntes(novas)
   }
 
   return (

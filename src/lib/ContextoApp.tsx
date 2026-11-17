@@ -3,7 +3,7 @@ import type { Session } from '@supabase/supabase-js'
 import { supabase } from './supabase'
 import {
   atualizarAtividade, atualizarCuidado, atualizarItemLista, criarAtividade, criarAtividades, criarCuidados, criarItemLista,
-  tabInserir, tabListar,
+  tabAtualizar, tabInserir, tabListar,
   definirOcorrencia, excluirCuidado, excluirDefinitivo, excluirItensLista,
   listarAreas, listarAtividades, listarCuidados, listarItensLista, listarOcorrencias,
 } from './dados'
@@ -39,6 +39,8 @@ interface Ctx {
   pausas: Pausa[]
   viagens: Viagem[]
   registrarEnergia: (nivel: NivelEnergia, marcas: MarcaEnergia[]) => Promise<void>
+  /** Troca as marcas (dormi bem, bebi água...) do check-in de hoje sem criar outro */
+  marcarEnergia: (id: string, marcas: MarcaEnergia[]) => Promise<void>
   criarVarias: (lista: NovaAtividade[]) => Promise<boolean>
   recarregarViagens: () => Promise<void>
 }
@@ -256,6 +258,16 @@ export function ProvedorApp({ children }: { children: ReactNode }) {
     [],
   )
 
+  const marcarEnergia = useCallback(async (id: string, marcas: MarcaEnergia[]) => {
+    setEnergias((prev) => prev.map((x) => (x.id === id ? { ...x, marcas } : x)))
+    if (id.startsWith('tmp-')) return // ainda salvando: as marcas vão no próximo toque
+    try {
+      await tabAtualizar<Energia>('energia', id, { marcas })
+    } catch {
+      /* sem internet: fica na tela; o próximo toque tenta de novo */
+    }
+  }, [])
+
   const criarVarias = useCallback(
     async (lista: NovaAtividade[]) => {
       try {
@@ -300,8 +312,8 @@ export function ProvedorApp({ children }: { children: ReactNode }) {
   const nome = (sessao?.user.user_metadata?.nome as string | undefined) || localStorage.getItem('miaulife-nome') || 'Thaís'
 
   const valor = useMemo(
-    () => ({ sessao, carregandoSessao, carregando, nome, areas, atividades, ocorrencias, erro, recarregar, criar, atualizar, excluirParaSempre, marcarOcorrencia, cuidados, itensLista, criarCuidadosEmLote, atualizarCuidadoPorId, excluirCuidadoPorId, adicionarItemLista, atualizarItem, removerItens, etapa5, energias, pausas, viagens, registrarEnergia, criarVarias, recarregarViagens }),
-    [sessao, carregandoSessao, carregando, nome, areas, atividades, ocorrencias, erro, recarregar, criar, atualizar, excluirParaSempre, marcarOcorrencia, cuidados, itensLista, criarCuidadosEmLote, atualizarCuidadoPorId, excluirCuidadoPorId, adicionarItemLista, atualizarItem, removerItens, etapa5, energias, pausas, viagens, registrarEnergia, criarVarias, recarregarViagens],
+    () => ({ sessao, carregandoSessao, carregando, nome, areas, atividades, ocorrencias, erro, recarregar, criar, atualizar, excluirParaSempre, marcarOcorrencia, cuidados, itensLista, criarCuidadosEmLote, atualizarCuidadoPorId, excluirCuidadoPorId, adicionarItemLista, atualizarItem, removerItens, etapa5, energias, pausas, viagens, registrarEnergia, marcarEnergia, criarVarias, recarregarViagens }),
+    [sessao, carregandoSessao, carregando, nome, areas, atividades, ocorrencias, erro, recarregar, criar, atualizar, excluirParaSempre, marcarOcorrencia, cuidados, itensLista, criarCuidadosEmLote, atualizarCuidadoPorId, excluirCuidadoPorId, adicionarItemLista, atualizarItem, removerItens, etapa5, energias, pausas, viagens, registrarEnergia, marcarEnergia, criarVarias, recarregarViagens],
   )
   return <Contexto.Provider value={valor}>{children}</Contexto.Provider>
 }
