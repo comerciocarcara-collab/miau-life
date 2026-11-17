@@ -1,10 +1,10 @@
 # 🐾 Miau Life — Etapa 5: o que fazer agora
 
 O app mudou de casa e ganhou o jeito "uma coisa por vez". Endereço novo:
-**https://vetclinvila-dotcom.github.io/miaulife/** (o banco no Supabase é o mesmo, então os dados e o login continuam).
+**https://comerciocarcara-collab.github.io/miau-life/** (o banco no Supabase é o mesmo, então os dados e o login continuam).
 
 1. **Rodar o `etapa5.sql`** — Supabase → projeto **MiauLife** → **SQL Editor** → **+** → *Create a new snippet* → cole todo o arquivo `supabase/etapa5.sql` → **Run**. Pode rodar mais de uma vez. (Se o `etapa4.sql` ainda não tinha rodado, rode ele antes.)
-2. **Conferir o GitHub** do repositório `miaulife`: **Settings → Pages → Source = GitHub Actions** e os dois segredos `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` em **Settings → Secrets and variables → Actions**.
+2. **Conferir o GitHub** do repositório `miau-life`: **Settings → Pages → Source = GitHub Actions** e os dois segredos `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` em **Settings → Secrets and variables → Actions**.
 3. **No iPhone:** abra o endereço novo no Safari → Compartilhar → **Adicionar à Tela de Início** (pode apagar o ícone antigo).
 
 ### O que tem de novo
